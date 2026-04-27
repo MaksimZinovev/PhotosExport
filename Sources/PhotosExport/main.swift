@@ -99,6 +99,7 @@ enum Main {
 
           // Reuse the per-folder set across assets so filenames remain unique.
           var usedNames = usedNamesByFolder[folder] ?? Set<String>()
+
           let exportedResources = try await exportAllResources(
             asset: asset,
             captureDate: date,
@@ -123,6 +124,14 @@ enum Main {
               usedNames: &usedNames
             )
             let sidecarURL = folder.appendingPathComponent(sidecarName)
+
+            if settings.incremental && FileManager.default.fileExists(atPath: sidecarURL.path) {
+              await logDebug(debugLogger, "metadata.json.skip existing asset=\(asset.localIdentifier) dest=\(sidecarURL.path)")
+              usedNamesByFolder[folder] = usedNames
+              exported += 1
+              bar.tick(label + " ✓")
+              continue
+            }
 
             var metadata = await extractMetadata(asset: asset, logger: debugLogger)
 

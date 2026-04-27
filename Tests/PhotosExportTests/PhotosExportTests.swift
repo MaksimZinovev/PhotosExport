@@ -129,6 +129,17 @@ final class PhotosExportTests: XCTestCase {
     XCTAssertEqual(alphaLetter(from: 0, offset: -27), "z")
   }
 
+  func testAlphaSuffixEscalatesByLength() {
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 0), "a")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 25), "z")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 26), "aa")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 27), "ab")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 51), "az")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 52), "ba")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 701), "zz")
+    XCTAssertEqual(alphaSuffix(from: 0, attempt: 702), "aaa")
+  }
+
   func testSanitizeReplacesSlashAndColon() {
     XCTAssertEqual(sanitize("a/b:c"), "a_b-c")
   }
@@ -357,5 +368,84 @@ final class PhotosExportTests: XCTestCase {
     )
 
     XCTAssertEqual(wrapped, "\(ts)a.jpg")
+  }
+
+  func testExportFilenameExceeds26CollisionsWithTwoLetterSuffix() {
+    var cal = Calendar(identifier: .gregorian)
+    cal.timeZone = TimeZone(secondsFromGMT: 0)!
+    let date = cal.date(from: DateComponents(year: 2025, month: 1, day: 2, hour: 3, minute: 4, second: 5))!
+
+    let ts = captureTimestampString(date)
+    var used = Set<String>(["\(ts).jpg"])
+    var results: [String] = []
+
+    for _ in 0..<27 {
+      let result = exportFilename(
+        captureDate: date,
+        originalFilename: "overflow.jpg",
+        fallbackSeed: "overflow",
+        uti: "public.jpeg",
+        usedNames: &used
+      )
+      results.append(result)
+    }
+
+    XCTAssertEqual(results[25].count, 14 + 1 + 4)
+    XCTAssertEqual(results[26].count, 14 + 2 + 4)
+    XCTAssertTrue(results[26].hasPrefix("\(ts)"))
+    XCTAssertTrue(results[26].hasSuffix(".jpg"))
+  }
+
+  func testExportFilenameEscalatesBeyondTwoLetterSuffixes() {
+    var cal = Calendar(identifier: .gregorian)
+    cal.timeZone = TimeZone(secondsFromGMT: 0)!
+    let date = cal.date(from: DateComponents(year: 2025, month: 1, day: 2, hour: 3, minute: 4, second: 5))!
+
+    let ts = captureTimestampString(date)
+    var used = Set<String>(["\(ts).jpg"])
+    var results: [String] = []
+
+    for _ in 0..<703 {
+      let result = exportFilename(
+        captureDate: date,
+        originalFilename: "overflow.jpg",
+        fallbackSeed: "overflow",
+        uti: "public.jpeg",
+        usedNames: &used
+      )
+      results.append(result)
+    }
+
+    XCTAssertEqual(results[701].count, 14 + 2 + 4)
+    XCTAssertEqual(results[702].count, 14 + 3 + 4)
+    XCTAssertEqual(Set(results).count, results.count)
+  }
+
+  func testExportFilenameHandles1000Collisions() {
+    var cal = Calendar(identifier: .gregorian)
+    cal.timeZone = TimeZone(secondsFromGMT: 0)!
+    let date = cal.date(from: DateComponents(year: 2025, month: 1, day: 2, hour: 3, minute: 4, second: 5))!
+
+    let ts = captureTimestampString(date)
+    var used = Set<String>(["\(ts).jpg"])
+
+    var results: [String] = []
+    for _ in 0..<1000 {
+      let fn = exportFilename(
+        captureDate: date,
+        originalFilename: "overflow.jpg",
+        fallbackSeed: "overflow",
+        uti: "public.jpeg",
+        usedNames: &used
+      )
+      results.append(fn)
+    }
+
+    XCTAssertEqual(Set(results).count, 1000)
+
+    for r in results {
+      XCTAssertTrue(r.hasSuffix(".jpg"))
+      XCTAssertTrue(r.hasPrefix("\(ts)"))
+    }
   }
 }

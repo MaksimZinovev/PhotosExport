@@ -25,9 +25,22 @@ func fnv1a64(_ s: String) -> UInt64 {
   return hash
 }
 
-func alphaLetter(from hash: UInt64, offset: Int = 0) -> Character {
+func alphaLetter(from hash: UInt64, offset: Int = 0) -> String {
   let idx = Int((hash % 26) + UInt64((offset % 26 + 26) % 26)) % 26
-  return Character(UnicodeScalar(97 + idx)!)
+  return String(UnicodeScalar(97 + idx)!)
+}
+
+func alphaSuffix(from hash: UInt64, attempt: Int) -> String {
+  precondition(attempt >= 0)
+
+  var n = attempt
+  var letters: [String] = []
+  repeat {
+    letters.append(alphaLetter(from: hash, offset: n % 26))
+    n = n / 26 - 1
+  } while n >= 0
+
+  return letters.reversed().joined()
 }
 
 func sanitize(_ s: String) -> String {
