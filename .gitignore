@@ -26,3 +26,12 @@ DerivedData/
 
 # Editor
 .vscode/
+
+
+# Pi
+.pi/
+.docfence/
+.ckignore
+docs/_prompts/
+.pi-lens/
+.obsidian

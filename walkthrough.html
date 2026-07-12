@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Export your iPhone photos to your Mac — walkthrough</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #0a0a0a;
+        --accent: #3b82f6;
+        --accent-fg: #ffffff;
+        --accent-2: #8b5cf6;
+        --muted: #666666;
+        --border: #e6e6e6;
+        --surface: #ffffff;
+        --surface-2: #fafafa;
+        --success: #16a34a;
+        --warning: #d97706;
+        --danger: #dc2626;
+        --display: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+        --dot: radial-gradient(rgba(10, 10, 10, 0.1) 1px, transparent 1px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--body);
+        line-height: 1.6;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      code {
+        font-family: var(--mono);
+        font-size: 0.92em;
+      }
+
+      .container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Header */
+      header.top {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: saturate(180%) blur(14px);
+        border-bottom: 1px solid var(--border);
+      }
+      .top-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 60px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: -0.01em;
+      }
+      .brand-mark {
+        width: 24px;
+        height: 24px;
+        border-radius: 7px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .brand small {
+        color: var(--muted);
+        font-weight: 500;
+        font-size: 13px;
+      }
+      .top-spacer {
+        flex: 1;
+      }
+      .progress-mini {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .progress-mini .bar {
+        width: 120px;
+        height: 6px;
+        background: var(--border);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progress-mini .bar i {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        transition: width 0.35s ease;
+      }
+      .top-reset {
+        font: inherit;
+        font-size: 13px;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 7px 12px;
+        cursor: pointer;
+      }
+      .top-reset:hover {
+        color: var(--fg);
+        border-color: var(--fg);
+      }
+
+      /* Hero */
+      .hero {
+        padding: 56px 0 32px;
+        background-image: var(--dot);
+        background-size: 14px 14px;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--mono);
+        font-size: 11.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 6px 12px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        margin-bottom: 18px;
+      }
+      .hero-eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .hero h1 {
+        font-family: var(--display);
+        font-size: clamp(30px, 4.6vw, 46px);
+        line-height: 1.06;
+        letter-spacing: -0.02em;
+        margin: 0 0 14px;
+        max-width: 20ch;
+        font-weight: 700;
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: linear-gradient(120deg, var(--accent), var(--accent-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero p.lede {
+        font-size: 17px;
+        color: var(--muted);
+        max-width: 60ch;
+        margin: 0 0 22px;
+      }
+
+      /* Presets (also set the branching) */
+      .presets-label {
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 0 10px;
+      }
+      .presets {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .preset {
+        font: inherit;
+        cursor: pointer;
+        text-align: left;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 13.5px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 180px;
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          transform 0.15s;
+      }
+      .preset:hover {
+        border-color: var(--accent);
+      }
+      .preset.active {
+        border-color: var(--accent);
+        background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+      }
+      .preset .pname {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .preset .pdesc {
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+
+      /* Layout: timeline rail + main */
+      .walk {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 36px;
+        padding: 28px 0 80px;
+        align-items: start;
+      }
+      @media (max-width: 760px) {
+        .walk {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+      }
+
+      /* Vertical timeline rail */
+      .rail {
+        position: sticky;
+        top: 84px;
+      }
+      @media (max-width: 760px) {
+        .rail {
+          position: static;
+        }
+      }
+      .rail-title {
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 0 14px;
+      }
+      .rail ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      .rail ol::before {
+        content: "";
+        position: absolute;
+        left: 13px;
+        top: 10px;
+        bottom: 10px;
+        width: 2px;
+        background: var(--border);
+        border-radius: 999px;
+        z-index: 0;
+      }
+      .rail li {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 4px 0;
+        cursor: pointer;
+        min-height: 54px;
+      }
+      .rail li .node {
+        flex: 0 0 auto;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        transition: all 0.18s;
+      }
+      .rail li .node.done {
+        background: var(--success);
+        border-color: var(--success);
+        color: #fff;
+      }
+      .rail li .node.current {
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
+      }
+      .rail li .node.current.done {
+        color: #fff;
+      }
+      .rail li .meta {
+        padding-top: 0;
+      }
+      .rail li .stitle {
+        font-size: 13.5px;
+        color: var(--fg);
+        font-weight: 500;
+        line-height: 1.2;
+      }
+      .rail li.active .stitle {
+        color: var(--accent);
+      }
+      .rail li .ssub {
+        font-size: 11.5px;
+        color: var(--muted);
+        line-height: 1.3;
+        margin-top: 1px;
+      }
+      .rail li.skipped {
+        opacity: 0.45;
+      }
+      .rail li.skipped .node {
+        background: repeating-linear-gradient(
+          45deg,
+          var(--surface),
+          var(--surface) 4px,
+          var(--border) 4px,
+          var(--border) 8px
+        );
+      }
+
+      /* Main step panel */
+      .panel {
+        min-height: 420px;
+      }
+      .step-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 26px 28px;
+      }
+      .step-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        font-family: var(--display);
+      }
+      .step-tag {
+        font-family: var(--mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+      }
+      .step h2 {
+        font-family: var(--display);
+        font-size: 22px;
+        letter-spacing: -0.01em;
+        margin: 0 0 8px;
+        font-weight: 700;
+      }
+      .step .plain {
+        font-size: 16px;
+        color: var(--fg);
+        margin: 0 0 18px;
+        max-width: 62ch;
+      }
+      .step .plain strong {
+        font-weight: 600;
+      }
+
+      /* Visual block */
+      .visual {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        margin: 0 0 18px;
+        background-image: var(--dot);
+        background-size: 12px 12px;
+      }
+      .visual svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* Details toggle (progressive disclosure) */
+      .details-wrap {
+        margin: 0 0 18px;
+      }
+      .details-toggle {
+        font: inherit;
+        cursor: pointer;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--accent);
+        background: transparent;
+        border: none;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .details-toggle:hover {
+        text-decoration: underline;
+      }
+      .details-toggle .chev {
+        transition: transform 0.18s;
+      }
+      .details-wrap.open .chev {
+        transform: rotate(90deg);
+      }
+      .details {
+        display: none;
+        margin-top: 12px;
+        padding: 14px 16px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      .details-wrap.open .details {
+        display: block;
+      }
+      .details p {
+        margin: 0 0 10px;
+        font-size: 14px;
+        color: var(--fg);
+      }
+      .details p:last-child {
+        margin-bottom: 0;
+      }
+      .details .callout {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        margin: 10px 0;
+        font-size: 13.5px;
+      }
+      .details .callout.warn {
+        border-color: color-mix(in srgb, var(--warning) 40%, transparent);
+        background: color-mix(in srgb, var(--warning) 8%, var(--surface));
+      }
+      .details .callout.tip {
+        border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+        background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+      }
+      .details pre {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        background: var(--fg);
+        color: var(--bg);
+        padding: 12px 14px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 10px 0;
+        line-height: 1.5;
+      }
+      .details table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin: 8px 0;
+      }
+      .details th,
+      .details td {
+        text-align: left;
+        padding: 7px 10px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .details th {
+        font-weight: 600;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .details code.flag {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 1px 5px;
+        font-size: 12px;
+      }
+
+      /* AI prompt box */
+      .prompt-box {
+        margin: 18px 0 0;
+        padding: 16px;
+        background: linear-gradient(
+          135deg,
+          color-mix(in srgb, var(--accent) 8%, var(--surface)),
+          color-mix(in srgb, var(--accent-2) 8%, var(--surface))
+        );
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+        border-radius: 12px;
+      }
+      .prompt-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .prompt-label .ai-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .prompt-text {
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--fg);
+        margin: 0 0 12px;
+        min-height: 1.55em;
+      }
+      .prompt-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn {
+        font: inherit;
+        cursor: pointer;
+        border-radius: 9px;
+        padding: 9px 14px;
+        font-size: 13.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: var(--accent-fg);
+        border-color: var(--accent);
+      }
+      .btn-primary:hover {
+        filter: brightness(1.06);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--fg);
+        border-color: var(--border);
+      }
+      .btn-ghost:hover {
+        background: var(--surface-2);
+      }
+      .copied {
+        font-size: 12.5px;
+        color: var(--success);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .copied.show {
+        opacity: 1;
+      }
+
+      /* Nav buttons */
+      .step-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+      }
+      .step-nav .done-btn {
+        background: var(--success);
+        color: #fff;
+        border-color: var(--success);
+      }
+      .step-nav .done-btn.done-yes {
+        background: var(--surface);
+        color: var(--success);
+        border-color: color-mix(in srgb, var(--success) 40%, transparent);
+      }
+
+      /* Off-ramps */
+      .offramps {
+        margin-top: 10px;
+        padding: 18px;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        background: var(--surface-2);
+      }
+      .offramps h3 {
+        font-family: var(--display);
+        font-size: 15px;
+        margin: 0 0 4px;
+        font-weight: 600;
+      }
+      .offramps p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+      .offramp-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+      }
+      @media (max-width: 600px) {
+        .offramp-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .offramp {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .offramp .o-title {
+        font-weight: 600;
+        font-size: 13.5px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .offramp .o-body {
+        font-size: 12.5px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .offramp .o-tag {
+        font-family: var(--mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        margin-top: 6px;
+        display: inline-block;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 24px 0 40px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      footer .container {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      /* hint */
+      .hint {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+      kbd {
+        font-family: var(--mono);
+        font-size: 11.5px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 5px;
+        padding: 1px 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="container top-row">
+        <div class="brand">
+          <span class="brand-mark"></span>PhotosExport
+          <small>· walkthrough</small>
+        </div>
+        <div class="top-spacer"></div>
+        <div class="progress-mini">
+          <span id="progressText">0 of 0 done</span
+          ><span class="bar"><i id="progressBar"></i></span>
+        </div>
+        <button class="top-reset" id="resetBtn" title="Start over">
+          Reset
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-eyebrow">
+            <span class="dot"></span>Step-by-step · AI-assisted
+          </div>
+          <h1>Move your iPhone photos onto your <em>Mac</em>, safely.</h1>
+          <p class="lede">
+            A guided walkthrough of the whole pipeline — from plugging in the
+            phone to a clean <code>YYYY/MM</code> folder of originals. One step
+            at a time. If you get stuck, each step gives you a ready-made prompt
+            to paste into your AI assistant.
+          </p>
+
+          <div class="presets-label">
+            Start by picking your situation — this shapes the steps
+          </div>
+          <div class="presets" id="presets">
+            <button class="preset" data-scenario="own">
+              <span class="pname">My own phone</span
+              ><span class="pdesc">First export, your library</span>
+            </button>
+            <button class="preset" data-scenario="other">
+              <span class="pname">Someone else's phone</span
+              ><span class="pdesc">Keep their photos separate</span>
+            </button>
+            <button class="preset" data-scenario="test">
+              <span class="pname">Small test first</span
+              ><span class="pdesc">~6 photos, end-to-end</span>
+            </button>
+            <button class="preset" data-scenario="rerun">
+              <span class="pname">Re-running</span
+              ><span class="pdesc">Incremental, already built</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="container">
+        <div class="walk">
+          <aside class="rail" id="rail">
+            <div class="rail-title">Your timeline</div>
+            <ol id="railList"></ol>
+          </aside>
+          <section class="panel" id="panel"></section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <span
+          >Self-contained walkthrough · styled with the Dithered system</span
+        >
+        <span>Built from <code>EXPORT-GUIDE.md</code></span>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+
+        // ---- Step content (plain language, non-technical) ----
+        var STEPS = [
+          {
+            id: 0,
+            title: "Decide: one library, or a separate one?",
+            tag: "Decision",
+            applies: { own: true, other: true, test: true, rerun: true },
+            plain:
+              "PhotosExport reads your Mac's <strong>System Photo Library</strong> — the one Photos.app is currently using. If you're exporting <em>someone else's</em> phone, you'll want a separate library so their photos never mix with yours. You already picked your situation above — we've set this for you.",
+            visual: "decision",
+            details: [
+              {
+                type: "p",
+                text: "PhotosExport reads the entire System Photo Library filtered by year. It can't filter by person or by source device — that's why the library choice matters.",
+              },
+              {
+                type: "table",
+                head: ["Situation", "Recommended"],
+                rows: [
+                  ["Exporting your own phone", "Your existing library is fine"],
+                  [
+                    "Exporting someone else's phone",
+                    "Create a separate library (next step)",
+                  ],
+                ],
+              },
+            ],
+            promptBase:
+              "I'm exporting {whose} phone to my Mac using PhotosExport. {branch}Confirm whether I need a separate Photos.app library, and tell me what 'System Photo Library' means in one sentence for a non-technical user.",
+          },
+          {
+            id: 1,
+            title: "Create a separate Photos library",
+            tag: "Setup · optional",
+            applies: { own: false, other: true, test: false, rerun: false },
+            plain:
+              "Only needed for <strong>someone else's phone</strong>. You'll make a brand-new, empty Photos library and tell macOS to treat it as the System Photo Library. Your own photos stay untouched in your original library.",
+            visual: "library",
+            details: [
+              {
+                type: "p",
+                text: "You create the library <em>from inside Photos</em>, not from the Applications folder.",
+              },
+              {
+                type: "ol",
+                items: [
+                  "Quit Photos (⌘Q).",
+                  "Hold ⌥ (Option) and click Photos in the Dock. Keep holding until a dialog appears.",
+                  'Click "Create New…" → pick a location (e.g. ~/Pictures) → name it e.g. "Natalia Photos" → Save.',
+                  "Photos opens the empty library.",
+                  'Photos → Settings (⌘,) → General → "Use as System Photo Library."',
+                ],
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: 'The button tells you the state: "Use as System Photo Library" (clickable) = NOT set yet, click it. "Photos is using the system photo library" (greyed) = already set, good. Only one library can be system at a time.',
+              },
+              {
+                type: "callout",
+                kind: "tip",
+                text: 'To switch back when done: quit Photos → hold ⌥ → open Photos → choose your original library → Settings → General → "Use as System Photo Library."',
+              },
+            ],
+            promptBase:
+              "I need to create a separate Photos.app library on my Mac for someone else's phone, and set it as the System Photo Library. Walk me through the Option-click method step by step, and tell me how to switch back to my own library afterward.",
+          },
+          {
+            id: 2,
+            title: "Import the iPhone into Photos.app",
+            tag: "Import",
+            applies: { own: true, other: true, test: true, rerun: true },
+            plain:
+              'Plug the phone in with the USB cable. Photos.app pulls the photos into the library you just set up. <strong>Don\'t check "Delete after importing"</strong> — keep the phone intact until everything is verified later.',
+            visual: "import",
+            details: [
+              {
+                type: "ol",
+                items: [
+                  "Plug the iPhone into the Mac via USB.",
+                  "On the phone, tap Trust and enter the passcode if asked.",
+                  "In Photos, find the iPhone in the left sidebar under Devices → click it.",
+                  'Make sure "Delete items after importing" is UNCHECKED.',
+                  'Click "Import All New Photos" (or select a few → "Import Selected" for a test).',
+                  "Wait for the progress bar to finish. Keep Photos open and the phone plugged in.",
+                ],
+              },
+              {
+                type: "callout",
+                kind: "tip",
+                text: "Small-batch first: before importing all ~40 GB, import ~6 photos and run the rest of this walkthrough on them. Confirms everything works before the long import.",
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: 'Stuck progress bar? Click Stop Import, unplug the phone, plug it back in, re-tap Trust, retry with 1 photo. A common cause: iCloud "Optimize iPhone Storage" is on, so the phone fetches originals from iCloud before transferring.',
+              },
+            ],
+            promptBase:
+              "I'm importing my iPhone's photos into Photos.app on my Mac over USB. {test}Explain in plain language what to click, why I should leave \"Delete items after importing\" unchecked, and what to do if the progress bar freezes.",
+          },
+          {
+            id: 3,
+            title: "Build the PhotosExport tool",
+            tag: "Build",
+            applies: { own: true, other: true, test: true, rerun: false },
+            plain:
+              "PhotosExport is a small free tool you compile once. You'll download its source code and build it. This is the only step that uses the Terminal — and only once.",
+            visual: "build",
+            details: [
+              { type: "p", text: "Open Terminal and run:" },
+              {
+                type: "pre",
+                code: "# Check Swift is installed\nswift --version\n# If 'command not found': xcode-select --install, then re-run.\n\n# Clone and build\ncd ~/repos\ngit clone --depth 1 https://github.com/rcarmo/PhotosExport\ncd PhotosExport\nswift build -c release",
+              },
+              {
+                type: "p",
+                text: "The compiled tool ends up at .build/release/PhotosExport.",
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: 'Build error \'swift tools version 6.2.0 but installed 6.1.0\'? Patch Package.swift: set tools-version to 6.1, and add "-swift-version", "5" to the unsafeFlags in swiftSettings, then rebuild. This disables Swift 6 strict-concurrency errors that 6.1 enforces.',
+              },
+            ],
+            promptBase:
+              "I'm building the PhotosExport Swift tool from source on my Mac and got {buildstate}. Explain in plain, non-technical terms what the Terminal commands do, and {buildhelp}walk me through fixing a Swift tools-version mismatch if it appears.",
+          },
+          {
+            id: 4,
+            title: "Grant Photos permission",
+            tag: "Permission",
+            applies: { own: true, other: true, test: true, rerun: false },
+            plain:
+              "macOS ties Photos-library access to the app that launches the tool. So you run PhotosExport from <strong>Terminal.app</strong> itself (not an agent shell) — that way the permission attaches to Terminal.",
+            visual: "permission",
+            details: [
+              { type: "p", text: "Run once from Terminal:" },
+              {
+                type: "pre",
+                code: "cd ~/repos/PhotosExport\n./.build/release/PhotosExport --help",
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: 'If it exits with "Photos access denied": System Settings → Privacy & Security → Photos → enable Terminal, then re-run. The first successful run prints progress (creating folders, writing files).',
+              },
+            ],
+            promptBase:
+              'I need to grant PhotosExport access to my Mac\'s Photos library. Explain why I must run it from Terminal.app (not some other shell), and walk me through enabling Terminal under Privacy & Security → Photos if I see "Photos access denied".',
+          },
+          {
+            id: 5,
+            title: "Create the export folder",
+            tag: "Setup",
+            applies: { own: true, other: true, test: true, rerun: true },
+            plain:
+              "PhotosExport writes into a folder you choose — but it won't create the folder for you. Make it first. One command in Terminal.",
+            visual: "folder",
+            details: [
+              {
+                type: "pre",
+                code: "mkdir -p ~/PhonePhotos    # PhotosExport requires this to already exist",
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: 'Without this you\'ll get: Invalid arguments: exportDirectoryDoesNotExist("/Users/.../PhonePhotos")',
+              },
+            ],
+            promptBase:
+              "PhotosExport says it won't create the export folder for me. Give me the exact mkdir command for a non-technical user, explain what ~ means, and tell me what error I'll see if I forget this step.",
+          },
+          {
+            id: 6,
+            title: "Run the export",
+            tag: "Export",
+            applies: { own: true, other: true, test: true, rerun: true },
+            plain:
+              "Now the real step. PhotosExport reads the library and writes originals, Live Photo videos, edits, and .json metadata into clean YYYY/MM folders. Folder names and filenames are <strong>always automatic</strong> — based on each photo's creation date.",
+            visual: "run",
+            details: [
+              {
+                type: "pre",
+                code: "cd ~/repos/PhotosExport\n./.build/release/PhotosExport \\\n  --export-directory ~/PhonePhotos \\\n  --metadata \\\n  --year 2000 --end-year 2026 \\\n  --incremental",
+              },
+              {
+                type: "table",
+                head: ["Flag", "What it does"],
+                rows: [
+                  [
+                    "--export-directory PATH",
+                    "Where to write. Must already exist.",
+                  ],
+                  [
+                    "--metadata",
+                    "Also write a .json sidecar per asset (EXIF/GPS/place names).",
+                  ],
+                  [
+                    "--year / --end-year",
+                    "Filter which years to export. Wide range = everything.",
+                  ],
+                  [
+                    "--incremental",
+                    "Skip files whose destination name already exists (safe to re-run).",
+                  ],
+                ],
+              },
+              {
+                type: "callout",
+                kind: "tip",
+                text: "--year is a filter, not organization. YYYY/MM folders and YYYYMMDDHHMMSS.ext filenames are always automatic from each photo's creation date. Use a wide range (2000–2026) to grab everything.",
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: "--metadata sidecars can include precise GPS, place names, and camera serials — treat the output folder as sensitive.",
+              },
+            ],
+            promptBase:
+              'I\'m running PhotosExport for {runmode}. Explain in plain language what the command line flags do, why folder names are automatic, and what a safe "export everything" command looks like. {test}',
+          },
+          {
+            id: 7,
+            title: "Verify the output",
+            tag: "Verify",
+            applies: { own: true, other: true, test: true, rerun: true },
+            plain:
+              "Before deleting anything, check the export looks right. Expect YYYY/MM folders with .jpg, .mp4/.mov (Live Photo pairs), .plist (edits), and .json sidecars. If you see all of those, the export is complete.",
+            visual: "verify",
+            details: [
+              {
+                type: "pre",
+                code: "# Media files only (hide .json + .DS_Store):\ntree -I '*.json|.DS_Store' ~/PhonePhotos\n\n# Counts:\nfind ~/PhonePhotos -type f ! -name '*.json' ! -name '.DS_Store' | wc -l  # media\nfind ~/PhonePhotos -name '*.json' | wc -l                              # sidecars",
+              },
+              {
+                type: "callout",
+                kind: "tip",
+                text: "Expect .jpg, .mp4, .mov, and .plist — that's the completeness Image Capture would drop. .mp4/.mov are Live Photo paired videos; .plist holds edit/adjustment data.",
+              },
+            ],
+            promptBase:
+              "I've run the export and want to verify it before deleting anything. Give me the plain-language commands to list the media files and count them, and tell me which file types I should expect to see (including Live Photo pairs and edit data).",
+          },
+          {
+            id: 8,
+            title: "Cleanup: free Mac disk space",
+            tag: "Cleanup",
+            applies: { own: true, other: true, test: false, rerun: true },
+            plain:
+              "Photos.app was just a temporary middleman. Now that the folder is verified, you can delete the photos from the library to reclaim Mac disk space. The exported folder copies are independent files — they stay untouched.",
+            visual: "cleanup",
+            details: [
+              {
+                type: "p",
+                text: "You now have the photos in two places: the Photos library (staging) and the exported folder (the keeper). You only need the folder.",
+              },
+              {
+                type: "table",
+                head: ["View", "Acts on", "Use it to"],
+                rows: [
+                  [
+                    "Utilities → Imports",
+                    "the Mac's Photos library",
+                    "free Mac disk space",
+                  ],
+                  [
+                    "Devices → iPhone",
+                    "the iPhone's storage",
+                    "leave alone for now",
+                  ],
+                ],
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: 'Two steps to actually reclaim space (Photos keeps deleted items ~30 days recoverable): 1) Imports → select the group → ⌘Delete. 2) Sidebar → Recently Deleted → "Delete All" → enter password → disk space freed now.',
+              },
+              {
+                type: "callout",
+                kind: "warn",
+                text: "Before freeing the iPhone itself: 1) verify the export folder, 2) copy to external HDD + sync to cloud, 3) then delete from the iPhone. Deleting from Photos.app does NOT free iPhone space.",
+              },
+            ],
+            promptBase:
+              "I've verified my exported folder and want to free Mac disk space by deleting the staging copy from Photos.app. Explain in plain language the difference between the Imports view and the iPhone device view, the two steps needed to actually reclaim space, and the safety order before I delete anything from the phone itself.",
+          },
+        ];
+
+        var OFFRAMPS = [
+          {
+            title: "Remove duplicates",
+            tool: "czkawka",
+            body: "Run czkawka on the exported folder. Finds exact duplicates (by content hash) and similar images; review and delete. Catches shared photos between people too.",
+            tag: "Optional",
+          },
+          {
+            title: "Cloud backup",
+            tool: "rclone → B2",
+            body: "Sync the folder to a cloud bucket (e.g. Backblaze B2) with rclone for an off-site copy.",
+            tag: "Optional",
+          },
+          {
+            title: "External HDD copy",
+            tool: "copy",
+            body: "Copy the folder to an external drive for a local, offline backup. Independent files — just copy.",
+            tag: "Optional",
+          },
+        ];
+
+        // ---- State ----
+        var state = {
+          scenario: null, // 'own' | 'other' | 'test' | 'rerun'
+          current: 0, // index into the visible steps list
+          done: {}, // {stepId: true}
+          showDetails: false,
+        };
+
+        var visibleSteps = []; // computed from scenario
+
+        function scenarioLabel() {
+          return (
+            {
+              own: "my own",
+              other: "someone else's",
+              test: "a small test batch from my own",
+              rerun: "an incremental re-run of",
+            }[state.scenario] || "my"
+          );
+        }
+        function whosePhone() {
+          return (
+            {
+              own: "my own ",
+              other: "someone else's ",
+              test: "my own ",
+              rerun: "my own ",
+            }[state.scenario] || ""
+          );
+        }
+        function buildStateText() {
+          if (state.scenario === "test")
+            return "I'm doing a small test first (~6 photos). ";
+          if (state.scenario === "rerun")
+            return "I've already built PhotosExport before and I'm re-running incrementally. ";
+          return "";
+        }
+        function buildHelp() {
+          return state.scenario === "rerun"
+            ? ""
+            : "walk me through fixing a Swift tools-version mismatch if it appears, and ";
+        }
+
+        // ---- Render ----
+        function computeVisible() {
+          if (!state.scenario) {
+            visibleSteps = [];
+            return;
+          }
+          visibleSteps = STEPS.filter(function (s) {
+            return s.applies[state.scenario];
+          });
+        }
+
+        function renderPresets() {
+          var nodes = document.querySelectorAll("#presets .preset");
+          for (var i = 0; i < nodes.length; i++) {
+            nodes[i].classList.toggle(
+              "active",
+              nodes[i].dataset.scenario === state.scenario,
+            );
+          }
+        }
+
+        function renderProgress() {
+          var total = visibleSteps.length;
+          var doneCount = 0;
+          visibleSteps.forEach(function (s) {
+            if (state.done[s.id]) doneCount++;
+          });
+          document.getElementById("progressText").textContent =
+            doneCount + " of " + total + " done";
+          document.getElementById("progressBar").style.width =
+            (total ? (doneCount / total) * 100 : 0) + "%";
+        }
+
+        function renderRail() {
+          var ol = document.getElementById("railList");
+          ol.replaceChildren();
+          visibleSteps.forEach(function (s, idx) {
+            var li = document.createElement("li");
+            li.className = idx === state.current ? "active" : "";
+            var node = document.createElement("div");
+            node.className = "node";
+            if (state.done[s.id]) node.classList.add("done");
+            if (idx === state.current) node.classList.add("current");
+            node.textContent = state.done[s.id] ? "✓" : s.id;
+            var meta = document.createElement("div");
+            meta.className = "meta";
+            var t = document.createElement("div");
+            t.className = "stitle";
+            t.textContent = s.title;
+            meta.appendChild(t);
+            var sub = document.createElement("div");
+            sub.className = "ssub";
+            sub.textContent = s.tag;
+            meta.appendChild(sub);
+            li.appendChild(node);
+            li.appendChild(meta);
+            li.onclick = function () {
+              state.current = idx;
+              state.showDetails = false;
+              render();
+            };
+            ol.appendChild(li);
+          });
+        }
+
+        // SVG visuals — small, dithered-flavored
+        var VISUALS = {
+          decision:
+            '<svg viewBox="0 0 600 90" role="img" aria-label="Two paths: your library, or a separate one"><defs><linearGradient id="g0" x1="0" x2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect x="20" y="28" width="150" height="36" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="95" y="51" text-anchor="middle" font-size="13" fill="#0a0a0a" font-family="system-ui">Your phone</text><rect x="225" y="14" width="170" height="36" rx="9" fill="url(#g0)"/><text x="310" y="37" text-anchor="middle" font-size="13" fill="#fff" font-family="system-ui">Your existing library</text><rect x="225" y="58" width="170" height="28" rx="9" fill="#fff" stroke="#3b82f6" stroke-dasharray="4 3"/><text x="310" y="76" text-anchor="middle" font-size="11.5" fill="#3b82f6" font-family="system-ui">Separate library (other&#39;s phone)</text><line x1="170" y1="46" x2="222" y2="32" stroke="#999" stroke-width="1.4" marker-end="url(#arr)"/><line x1="170" y1="46" x2="222" y2="68" stroke="#999" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr)"/></svg>',
+          library:
+            '<svg viewBox="0 0 600 90" role="img" aria-label="An empty separate library becomes the system library"><rect x="30" y="20" width="150" height="50" rx="10" fill="#ffffff" stroke="#bfbfbf" stroke-dasharray="4 3"/><text x="105" y="43" text-anchor="middle" font-size="12.5" fill="#666" font-family="system-ui">New empty library</text><text x="105" y="60" text-anchor="middle" font-size="11" fill="#999" font-family="ui-monospace">e.g. Natalia Photos</text><line x1="185" y1="45" x2="245" y2="45" stroke="#3b82f6" stroke-width="2" marker-end="url(#arr)"/><rect x="250" y="20" width="180" height="50" rx="10" fill="url(#g0)"/><text x="340" y="42" text-anchor="middle" font-size="12.5" fill="#fff" font-family="system-ui">System Photo Library</text><text x="340" y="60" text-anchor="middle" font-size="11" fill="#fff" font-family="ui-monospace" opacity="0.85">set in Settings → General</text></svg>',
+          import:
+            '<svg viewBox="0 0 600 90" role="img" aria-label="iPhone plugged into Mac over USB"><rect x="30" y="26" width="70" height="40" rx="10" fill="#ffffff" stroke="#bfbfbf"/><text x="65" y="50" text-anchor="middle" font-size="12" fill="#0a0a0a" font-family="system-ui">iPhone</text><line x1="100" y1="46" x2="190" y2="46" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/><text x="145" y="38" text-anchor="middle" font-size="10.5" fill="#666" font-family="ui-monospace">USB</text><rect x="195" y="22" width="150" height="48" rx="10" fill="url(#g0)"/><text x="270" y="42" text-anchor="middle" font-size="12.5" fill="#fff" font-family="system-ui">Photos.app</text><text x="270" y="60" text-anchor="middle" font-size="10.5" fill="#fff" font-family="ui-monospace" opacity="0.85">imports → library</text><text x="400" y="50" font-size="11" fill="#d97706" font-family="system-ui">⚠ keep &#8220;Delete after importing&#8221; OFF</text></svg>',
+          build:
+            '<svg viewBox="0 0 600 90" role="img" aria-label="Download source then compile to a binary"><rect x="30" y="24" width="150" height="42" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="105" y="50" text-anchor="middle" font-size="12" fill="#0a0a0a" font-family="ui-monospace">git clone …</text><line x1="185" y1="45" x2="240" y2="45" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/><rect x="245" y="24" width="130" height="42" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="310" y="50" text-anchor="middle" font-size="12" fill="#0a0a0a" font-family="ui-monospace">swift build</text><line x1="378" y1="45" x2="430" y2="45" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/><rect x="435" y="24" width="135" height="42" rx="9" fill="url(#g0)"/><text x="502" y="50" text-anchor="middle" font-size="12" fill="#fff" font-family="ui-monospace">PhotosExport</text></svg>',
+          permission:
+            '<svg viewBox="0 0 600 90" role="img" aria-label="Terminal requests Photos access, you allow it in System Settings"><rect x="30" y="22" width="120" height="46" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="90" y="50" text-anchor="middle" font-size="12" fill="#0a0a0a" font-family="system-ui">Terminal.app</text><line x1="152" y1="45" x2="208" y2="45" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/><rect x="212" y="22" width="200" height="46" rx="9" fill="url(#g0)"/><text x="312" y="42" text-anchor="middle" font-size="12" fill="#fff" font-family="system-ui">Privacy &amp; Security → Photos</text><text x="312" y="60" text-anchor="middle" font-size="11" fill="#fff" font-family="ui-monospace" opacity="0.85">enable Terminal</text><text x="440" y="50" font-size="11.5" fill="#16a34a" font-family="system-ui">✓ access granted</text></svg>',
+          folder:
+            '<svg viewBox="0 0 600 90" role="img" aria-label="Create an empty export folder with mkdir"><rect x="40" y="24" width="170" height="42" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="125" y="50" text-anchor="middle" font-size="12" fill="#0a0a0a" font-family="ui-monospace">mkdir -p ~/PhonePhotos</text><line x1="212" y1="45" x2="265" y2="45" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/><rect x="270" y="22" width="150" height="48" rx="10" fill="url(#g0)"/><text x="345" y="42" text-anchor="middle" font-size="12.5" fill="#fff" font-family="system-ui">~/PhonePhotos/</text><text x="345" y="60" text-anchor="middle" font-size="11" fill="#fff" font-family="ui-monospace" opacity="0.85">(empty, exists)</text></svg>',
+          run: '<svg viewBox="0 0 600 110" role="img" aria-label="PhotosExport reads the library and writes YYYY/MM folders"><rect x="20" y="20" width="140" height="42" rx="9" fill="url(#g0)"/><text x="90" y="46" text-anchor="middle" font-size="12" fill="#fff" font-family="system-ui">PhotosExport</text><line x1="162" y1="41" x2="210" y2="41" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/><rect x="214" y="20" width="150" height="42" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="289" y="46" text-anchor="middle" font-size="12" fill="#0a0a0a" font-family="system-ui">System library</text><line x1="365" y1="41" x2="415" y2="41" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#arr)"/><rect x="420" y="14" width="70" height="24" rx="6" fill="#ffffff" stroke="#bfbfbf"/><text x="455" y="31" text-anchor="middle" font-size="11" fill="#0a0a0a" font-family="ui-monospace">2024/12</text><rect x="495" y="14" width="70" height="24" rx="6" fill="#ffffff" stroke="#bfbfbf"/><text x="530" y="31" text-anchor="middle" font-size="11" fill="#0a0a0a" font-family="ui-monospace">2025/01</text><rect x="420" y="44" width="145" height="24" rx="6" fill="#ffffff" stroke="#bfbfbf"/><text x="492" y="61" text-anchor="middle" font-size="11" fill="#0a0a0a" font-family="ui-monospace">YYYYMMDDHHMMSS.jpg</text><text x="455" y="92" text-anchor="middle" font-size="10.5" fill="#666" font-family="system-ui">folders &amp; names automatic</text></svg>',
+          verify:
+            '<svg viewBox="0 0 600 100" role="img" aria-label="Check the output tree for expected file types"><rect x="30" y="16" width="120" height="72" rx="9" fill="#ffffff" stroke="#bfbfbf"/><text x="90" y="34" text-anchor="middle" font-size="11" fill="#0a0a0a" font-family="ui-monospace">2024/12/</text><text x="90" y="52" text-anchor="middle" font-size="10" fill="#3b82f6" font-family="ui-monospace">.jpg</text><text x="90" y="66" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">.mp4 .mov</text><text x="90" y="80" text-anchor="middle" font-size="10" fill="#666" font-family="ui-monospace">.plist .json</text><text x="200" y="40" font-size="12" fill="#16a34a" font-family="system-ui">✓ originals</text><text x="200" y="58" font-size="12" fill="#16a34a" font-family="system-ui">✓ Live Photo pairs</text><text x="200" y="76" font-size="12" fill="#16a34a" font-family="system-ui">✓ edits + metadata</text><text x="370" y="40" font-size="11" fill="#666" font-family="ui-monospace">tree -I &#8216;*.json|.DS_Store&#8217;</text></svg>',
+          cleanup:
+            '<svg viewBox="0 0 600 100" role="img" aria-label="Two copies: library is staging, folder is the keeper"><rect x="30" y="22" width="150" height="56" rx="10" fill="#ffffff" stroke="#bfbfbf" stroke-dasharray="4 3"/><text x="105" y="46" text-anchor="middle" font-size="12" fill="#666" font-family="system-ui">Photos library</text><text x="105" y="64" text-anchor="middle" font-size="11" fill="#d97706" font-family="system-ui">staging — disposable</text><line x1="185" y1="50" x2="240" y2="50" stroke="#999" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr)"/><rect x="245" y="22" width="160" height="56" rx="10" fill="url(#g0)"/><text x="325" y="46" text-anchor="middle" font-size="12" fill="#fff" font-family="system-ui">~/PhonePhotos/</text><text x="325" y="64" text-anchor="middle" font-size="11" fill="#fff" font-family="system-ui" opacity="0.9">the keeper</text><text x="430" y="50" font-size="11.5" fill="#16a34a" font-family="system-ui">delete from library</text><text x="430" y="66" font-size="11.5" fill="#16a34a" font-family="system-ui">→ reclaim space</text></svg>',
+        };
+
+        function renderDetailsBlock(s) {
+          if (!s.details || !s.details.length) return "";
+          var html = '<div class="details-wrap" id="detailsWrap">';
+          html +=
+            '<button class="details-toggle" id="detailsToggle"><span class="chev">▸</span> Show details &amp; commands</button>';
+          html += '<div class="details">';
+          s.details.forEach(function (d) {
+            if (d.type === "p") html += "<p>" + d.text + "</p>";
+            else if (d.type === "ol") {
+              html +=
+                '<ol style="margin:6px 0 10px;padding-left:22px;">' +
+                d.items
+                  .map(function (it) {
+                    return (
+                      '<li style="margin-bottom:5px;font-size:14px;">' +
+                      it +
+                      "</li>"
+                    );
+                  })
+                  .join("") +
+                "</ol>";
+            } else if (d.type === "pre")
+              html += "<pre>" + escapeHtml(d.code) + "</pre>";
+            else if (d.type === "table") {
+              html +=
+                "<table><thead><tr>" +
+                d.head
+                  .map(function (h) {
+                    return "<th>" + h + "</th>";
+                  })
+                  .join("") +
+                "</tr></thead><tbody>";
+              d.rows.forEach(function (r) {
+                html +=
+                  "<tr>" +
+                  r
+                    .map(function (c) {
+                      return "<td>" + c + "</td>";
+                    })
+                    .join("") +
+                  "</tr>";
+              });
+              html += "</tbody></table>";
+            } else if (d.type === "callout") {
+              html +=
+                '<div class="callout ' +
+                (d.kind || "") +
+                '">' +
+                d.text +
+                "</div>";
+            }
+          });
+          html += "</div></div>";
+          return html;
+        }
+
+        function escapeHtml(s) {
+          return s
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+        }
+
+        function buildPrompt(s) {
+          if (state.scenario === "other")
+            var branch =
+              "I'm using a separate Photos library for their photos so mine aren't mixed in. ";
+          else var branch = "I'm using my own existing Photos library. ";
+          var test =
+            state.scenario === "test"
+              ? "I'm testing with just ~6 photos first. "
+              : "";
+          var buildstate =
+            state.scenario === "rerun"
+              ? "no build errors (already built before)"
+              : "a possible Swift tools-version error";
+          var buildhelp = buildHelp();
+          var runmode =
+            state.scenario === "test"
+              ? "a small test batch"
+              : state.scenario === "rerun"
+                ? "an incremental re-run"
+                : "the full export";
+          return s.promptBase
+            .replace("{whose}", whosePhone())
+            .replace("{branch}", branch)
+            .replace("{test}", test)
+            .replace("{buildstate}", buildstate)
+            .replace("{buildhelp}", buildhelp)
+            .replace("{runmode}", runmode)
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
+        function renderPanel() {
+          var panel = document.getElementById("panel");
+          if (!visibleSteps.length) {
+            var empty = document.createElement("div");
+            empty.className = "step-card";
+            empty.style.textAlign = "center";
+            empty.style.color = "var(--muted)";
+            var ep1 = document.createElement("p");
+            ep1.style.fontSize = "16px";
+            ep1.style.margin = "0";
+            ep1.textContent =
+              "Pick your situation above to start the walkthrough. 👆";
+            empty.appendChild(ep1);
+            var ep2 = document.createElement("p");
+            ep2.className = "hint";
+            ep2.textContent =
+              "Each step comes with a ready-made prompt you can copy to your AI assistant if you get stuck.";
+            empty.appendChild(ep2);
+            panel.replaceChildren(empty);
+            return;
+          }
+          var s = visibleSteps[state.current];
+          var isDone = !!state.done[s.id];
+          var prevBtn = state.current > 0;
+          var nextBtn = state.current < visibleSteps.length - 1;
+
+          var html = '<div class="step-card step">';
+          html +=
+            '<div class="step-head"><div class="step-num">' +
+            s.id +
+            '</div><div><div class="step-tag">' +
+            s.tag +
+            "</div></div></div>";
+          html += "<h2>" + s.title + "</h2>";
+          html += '<p class="plain">' + s.plain + "</p>";
+          html += '<div class="visual">' + (VISUALS[s.visual] || "") + "</div>";
+          html += renderDetailsBlock(s);
+          // AI prompt
+          html += '<div class="prompt-box">';
+          html +=
+            '<div class="prompt-label"><span class="ai-dot"></span>Stuck? Copy this to your AI assistant</div>';
+          html +=
+            '<p class="prompt-text" id="promptText">' +
+            escapeHtml(buildPrompt(s)) +
+            "</p>";
+          html += '<div class="prompt-actions">';
+          html +=
+            '<button class="btn btn-primary" id="copyBtn">Copy prompt</button>';
+          html +=
+            '<button class="btn btn-ghost" id="regenBtn">Adjust to my situation</button>';
+          html += '<span class="copied" id="copiedFlag">Copied!</span>';
+          html += "</div></div>";
+          // Nav
+          html += '<div class="step-nav">';
+          html += '<div style="display:flex;gap:10px;">';
+          html +=
+            '<button class="btn btn-ghost" id="prevBtn"' +
+            (prevBtn
+              ? ""
+              : ' disabled style="opacity:0.4;cursor:not-allowed"') +
+            ">← Previous</button>";
+          html +=
+            '<button class="btn btn-ghost" id="nextBtn"' +
+            (nextBtn
+              ? ""
+              : ' disabled style="opacity:0.4;cursor:not-allowed"') +
+            ">Next →</button>";
+          html += "</div>";
+          html +=
+            '<button class="btn done-btn' +
+            (isDone ? " done-yes" : "") +
+            '" id="doneBtn">' +
+            (isDone ? "✓ Done — mark not done" : "Mark this step done") +
+            "</button>";
+          html += "</div>";
+          html +=
+            '<p class="hint">Tip: use <kbd>←</kbd> <kbd>→</kbd> to move between steps, <kbd>d</kbd> to mark done.</p>';
+          html += "</div>";
+
+          // Off-ramps appear on the last step
+          if (state.current === visibleSteps.length - 1) {
+            html +=
+              '<div class="offramps"><h3>Optional next steps</h3><p>Not required for the export itself — handy once your folder is verified.</p>';
+            html += '<div class="offramp-row">';
+            OFFRAMPS.forEach(function (o) {
+              html +=
+                '<div class="offramp"><div class="o-title">' +
+                o.title +
+                '</div><div class="o-body">' +
+                o.body +
+                '</div><div class="o-tag">' +
+                o.tool +
+                "</div></div>";
+            });
+            html += "</div></div>";
+          }
+
+          // html is built only from author-controlled static templates + escapeHtml() on dynamic parts;
+          // parse via a fragment to avoid innerHTML assignment.
+          var frag = document.createRange().createContextualFragment(html);
+          panel.replaceChildren(frag);
+          wirePanel(s);
+        }
+
+        function wirePanel(s) {
+          var copyBtn = document.getElementById("copyBtn");
+          if (copyBtn)
+            copyBtn.onclick = function () {
+              var text = document.getElementById("promptText").textContent;
+              navigator.clipboard.writeText(text).then(function () {
+                var flag = document.getElementById("copiedFlag");
+                flag.classList.add("show");
+                setTimeout(function () {
+                  flag.classList.remove("show");
+                }, 1600);
+              });
+            };
+          var regen = document.getElementById("regenBtn");
+          if (regen)
+            regen.onclick = function () {
+              // re-render prompt (it's already contextual; this nudges details open for more context)
+              var wrap = document.getElementById("detailsWrap");
+              if (wrap && !wrap.classList.contains("open"))
+                wrap.classList.add("open");
+              document.getElementById("promptText").textContent =
+                buildPrompt(s) +
+                " (Give me a plain-language, step-by-step answer tailored to my situation above.)";
+            };
+          var dt = document.getElementById("detailsToggle");
+          if (dt)
+            dt.onclick = function () {
+              document.getElementById("detailsWrap").classList.toggle("open");
+            };
+          var prev = document.getElementById("prevBtn");
+          if (prev)
+            prev.onclick = function () {
+              if (state.current > 0) {
+                state.current--;
+                state.showDetails = false;
+                render();
+              }
+            };
+          var next = document.getElementById("nextBtn");
+          if (next)
+            next.onclick = function () {
+              if (state.current < visibleSteps.length - 1) {
+                state.current++;
+                state.showDetails = false;
+                render();
+              }
+            };
+          var done = document.getElementById("doneBtn");
+          if (done)
+            done.onclick = function () {
+              if (state.done[s.id]) delete state.done[s.id];
+              else state.done[s.id] = true;
+              // auto-advance when marking done
+              if (state.done[s.id] && state.current < visibleSteps.length - 1)
+                state.current++;
+              render();
+            };
+        }
+
+        function render() {
+          computeVisible();
+          if (state.current >= visibleSteps.length)
+            state.current = Math.max(0, visibleSteps.length - 1);
+          renderPresets();
+          renderRail();
+          renderProgress();
+          renderPanel();
+        }
+
+        // ---- Events ----
+        document.querySelectorAll("#presets .preset").forEach(function (b) {
+          b.onclick = function () {
+            state.scenario = b.dataset.scenario;
+            state.current = 0;
+            state.done = {};
+            state.showDetails = false;
+            render();
+          };
+        });
+        document.getElementById("resetBtn").onclick = function () {
+          state.scenario = null;
+          state.current = 0;
+          state.done = {};
+          state.showDetails = false;
+          render();
+        };
+        document.addEventListener("keydown", function (e) {
+          if (!visibleSteps.length) return;
+          if (e.target && /^(input|textarea)$/i.test(e.target.tagName)) return;
+          if (e.key === "ArrowRight") {
+            if (state.current < visibleSteps.length - 1) {
+              state.current++;
+              state.showDetails = false;
+              render();
+            }
+          } else if (e.key === "ArrowLeft") {
+            if (state.current > 0) {
+              state.current--;
+              state.showDetails = false;
+              render();
+            }
+          } else if (e.key === "d" || e.key === "D") {
+            var s = visibleSteps[state.current];
+            if (state.done[s.id]) delete state.done[s.id];
+            else {
+              state.done[s.id] = true;
+              if (state.current < visibleSteps.length - 1) state.current++;
+            }
+            render();
+          }
+        });
+
+        // arrow marker for SVGs
+        (function injectMarker() {
+          var SVGNS = "http://www.w3.org/2000/svg";
+          var svg = document.createElementNS(SVGNS, "svg");
+          svg.setAttribute("style", "position:absolute;width:0;height:0");
+          var defs = document.createElementNS(SVGNS, "defs");
+          var marker = document.createElementNS(SVGNS, "marker");
+          marker.setAttribute("id", "arr");
+          marker.setAttribute("viewBox", "0 0 10 10");
+          marker.setAttribute("refX", "8");
+          marker.setAttribute("refY", "5");
+          marker.setAttribute("markerWidth", "7");
+          marker.setAttribute("markerHeight", "7");
+          marker.setAttribute("orient", "auto-start-reverse");
+          var path = document.createElementNS(SVGNS, "path");
+          path.setAttribute("d", "M0,0 L10,5 L0,10 z");
+          path.setAttribute("fill", "#999");
+          marker.appendChild(path);
+          defs.appendChild(marker);
+          var grad = document.createElementNS(SVGNS, "linearGradient");
+          grad.setAttribute("id", "g0");
+          grad.setAttribute("x1", "0");
+          grad.setAttribute("x2", "1");
+          var stop1 = document.createElementNS(SVGNS, "stop");
+          stop1.setAttribute("offset", "0");
+          stop1.setAttribute("stop-color", "#3b82f6");
+          var stop2 = document.createElementNS(SVGNS, "stop");
+          stop2.setAttribute("offset", "1");
+          stop2.setAttribute("stop-color", "#8b5cf6");
+          grad.appendChild(stop1);
+          grad.appendChild(stop2);
+          defs.appendChild(grad);
+          svg.appendChild(defs);
+          document.body.appendChild(svg);
+        })();
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
