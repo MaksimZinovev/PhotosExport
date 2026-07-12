@@ -11,6 +11,19 @@ It is intentionally opinionated:
 - Writes into a simple `YYYY/MM` folder hierarchy.
 - Uses a deterministic timestamp-based naming convention.
 
+## Interactive walkthrough
+
+Prefer a step-by-step, AI-assisted guide over reading source? The interactive walkthrough turns this repo into a one-step-at-a-time session: prerequisites, branching for your situation (your phone / someone else's / a small test / re-running), a copyable AI prompt per step, a command cheatsheet, and a FAQ.
+
+**Why:** the pipeline has a few non-obvious gotchas — a Swift tools-version mismatch at build time, Photos permissions for Terminal, `exportDirectoryDoesNotExist` (the export folder must exist first), and iCloud "Optimize iPhone Storage" stalling the import. The walkthrough front-loads these so you don't get stuck midway through an export.
+
+- 🌐 Live: <https://maksimzinovev.github.io/PhotosExport/>
+- Source guide: [`EXPORT-GUIDE.md`](EXPORT-GUIDE.md)
+
+| Dithered theme | Brutalism theme |
+| :---: | :---: |
+| ![The interactive walkthrough in the Dithered theme](assets/showcase_1.jpg) | ![The interactive walkthrough in the Brutalism theme](assets/showcase_2.jpg) |
+
 ## Requirements
 
 - macOS 13+
