@@ -151,3 +151,7 @@ If you’re building this with Swift 6 strict concurrency enabled: yes, it can b
 
 - `PHAssetResourceRequestOptions.isNetworkAccessAllowed` is enabled, so items stored in iCloud may be downloaded during export.
 - “True originals” are exported to the extent that Photos exposes them as `PHAssetResource`s; some assets may only have rendered derivatives available.
+
+## Credits
+
+PhotosExport is originally by [Rui Carmo](https://github.com/rcarmo) — see the [upstream repo](https://github.com/rcarmo/PhotosExport). Thank you, Rui, for writing a tool that exports *all* of an asset's `PHAssetResource`s (originals, Live Photo paired video, adjustment data, the lot) when every AppleScript and Shortcuts alternative fell short. This fork keeps the tool intact and adds an [interactive walkthrough](https://maksimzinovev.github.io/PhotosExport/) to make the export pipeline approachable for non-technical users.
