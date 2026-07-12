@@ -35,3 +35,6 @@ DerivedData/
 docs/_prompts/
 .pi-lens/
 .obsidian
+
+# ck semantic-search cache
+.ck/
