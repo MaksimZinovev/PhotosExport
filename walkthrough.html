@@ -2067,15 +2067,18 @@ tree -I '*.json|.DS_Store' ~/PhonePhotos</pre
               : state.scenario === "rerun"
                 ? "an incremental re-run"
                 : "the full export";
-          return s.promptBase
-            .replace("{whose}", whosePhone())
-            .replace("{branch}", branch)
-            .replace("{test}", test)
-            .replace("{buildstate}", buildstate)
-            .replace("{buildhelp}", buildhelp)
-            .replace("{runmode}", runmode)
-            .replace(/\s+/g, " ")
-            .trim();
+          return (
+            s.promptBase
+              .replace("{whose}", whosePhone())
+              .replace("{branch}", branch)
+              .replace("{test}", test)
+              .replace("{buildstate}", buildstate)
+              .replace("{buildhelp}", buildhelp)
+              .replace("{runmode}", runmode)
+              .replace(/\s+/g, " ")
+              .trim() +
+            " For fuller step-by-step context, the source guide is at https://github.com/MaksimZinovev/PhotosExport/blob/main/EXPORT-GUIDE.md — fetch it if you need more detail."
+          );
         }
 
         function renderPanel() {
