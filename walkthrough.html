@@ -4,10 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Export your iPhone photos to your Mac — walkthrough</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg: #ffffff;
-        --fg: #0a0a0a;
+        --fg: #111827;
         --accent: #3b82f6;
         --accent-fg: #ffffff;
         --accent-2: #8b5cf6;
@@ -19,17 +25,101 @@
         --success: #16a34a;
         --warning: #d97706;
         --danger: #dc2626;
-        --display: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-        --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-        --mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+        --display:
+          "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
+          sans-serif;
+        --body:
+          "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --mono:
+          "IBM Plex Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas,
+          monospace;
         --dot: radial-gradient(rgba(10, 10, 10, 0.1) 1px, transparent 1px);
       }
-      /* Brutalism recolor — same skeleton, accent tokens only (design/design-system/brutalism) */
+      /* Brutalism — faithful to design/design-system/brutalism/DESIGN.md:
+         color tokens + Darker Grotesque/JetBrains Mono + hard edges, thick borders, offset shadows */
       [data-theme="brutalism"] {
         --accent: #dd614c;
         --accent-fg: #ffffff;
         --accent-2: #daa144;
         --accent-2-fg: #0a0a0a;
+        --display: "Darker Grotesque", system-ui, -apple-system, sans-serif;
+        --body: "Darker Grotesque", system-ui, -apple-system, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+        --border: #111827;
+      }
+      /* Hard edges — square every surface, including the rail dots */
+      [data-theme="brutalism"] .step-card,
+      [data-theme="brutalism"] .visual,
+      [data-theme="brutalism"] .preset,
+      [data-theme="brutalism"] .offramps,
+      [data-theme="brutalism"] .offramp,
+      [data-theme="brutalism"] .prompt-box,
+      [data-theme="brutalism"] .details,
+      [data-theme="brutalism"] .callout,
+      [data-theme="brutalism"] .btn,
+      [data-theme="brutalism"] .top-reset,
+      [data-theme="brutalism"] .hero-eyebrow,
+      [data-theme="brutalism"] .progress-mini .bar,
+      [data-theme="brutalism"] .progress-mini .bar i,
+      [data-theme="brutalism"] .copied,
+      [data-theme="brutalism"] .rail li .node,
+      [data-theme="brutalism"] .step-num {
+        border-radius: 0;
+      }
+      /* Thick dark borders */
+      [data-theme="brutalism"] .step-card,
+      [data-theme="brutalism"] .visual,
+      [data-theme="brutalism"] .preset,
+      [data-theme="brutalism"] .offramp,
+      [data-theme="brutalism"] .prompt-box,
+      [data-theme="brutalism"] .details,
+      [data-theme="brutalism"] .callout,
+      [data-theme="brutalism"] .btn,
+      [data-theme="brutalism"] .top-reset,
+      [data-theme="brutalism"] .hero-eyebrow,
+      [data-theme="brutalism"] .rail li .node,
+      [data-theme="brutalism"] .offramps {
+        border-width: 2px;
+        border-color: #111827;
+      }
+      /* Hard offset shadows on key surfaces */
+      [data-theme="brutalism"] .step-card,
+      [data-theme="brutalism"] .preset.active,
+      [data-theme="brutalism"] .btn-primary,
+      [data-theme="brutalism"] .step-num {
+        box-shadow: 6px 6px 0 #111827;
+      }
+      /* Heavier, tighter display type */
+      [data-theme="brutalism"] .hero h1,
+      [data-theme="brutalism"] .step h2,
+      [data-theme="brutalism"] .section-title,
+      [data-theme="brutalism"] .offramps h3 {
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      [data-theme="brutalism"] .section-eyebrow,
+      [data-theme="brutalism"] .step-tag,
+      [data-theme="brutalism"] .prompt-label,
+      [data-theme="brutalism"] .rail-title,
+      [data-theme="brutalism"] .offramp .o-tag,
+      [data-theme="brutalism"] .presets-label {
+        letter-spacing: 0.06em;
+      }
+      /* Drop the dithered dot pattern — brutalism is raw, not dotted (no metaphor mixing) */
+      [data-theme="brutalism"] .hero,
+      [data-theme="brutalism"] .visual {
+        background-image: none;
+      }
+      /* SVG diagrams: black thick outlines + black arrows to match the hard border language */
+      [data-theme="brutalism"] .visual rect[stroke="#bfbfbf"] {
+        stroke: #111827;
+        stroke-width: 2;
+      }
+      [data-theme="brutalism"] .visual line[stroke="#999"] {
+        stroke: #111827;
+      }
+      [data-theme="brutalism"] #arr path {
+        fill: #111827;
       }
       /* SVG gradient + accent strokes follow the active theme */
       linearGradient#g0 > stop:nth-child(1) {
